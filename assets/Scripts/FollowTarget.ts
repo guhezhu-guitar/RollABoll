@@ -3,7 +3,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('FollowTarget')
 export class FollowTarget extends Component {
-
+    //此时的相机的朝向是z轴向右,x轴是朝向电脑内部的
     @property(Node)
     public target : Node;  //定义target节点,相机跟随target节点运动
 

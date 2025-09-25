@@ -1,4 +1,4 @@
-import { _decorator, Component, EventKeyboard, Input, input, KeyCode, Node, Vec2 } from 'cc';
+import { _decorator, Component, EventKeyboard, Input, input, KeyCode, Node, RigidBody, Vec2, Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Player')
@@ -6,7 +6,17 @@ export class Player extends Component {
     @property
     public speed = 5;
 
-     private moveDir:Vec2 = Vec2.ZERO
+    //设置的作用力及其大小
+    @property
+    public moveForce = 5;
+
+    //定义移动的方向,x代表左右,y代表上下
+     private moveDir:Vec2 = Vec2.ZERO;
+     //获取rgd(定义的节点)上的RigBody组件
+     private rgd:RigidBody =null;
+     protected start(): void {
+         this.rgd = this.getComponent(RigidBody);
+     }
 
     protected onLoad(): void {
         input.on(Input.EventType.KEY_DOWN,this.onkeyDown,this);
@@ -20,7 +30,7 @@ export class Player extends Component {
         input.off(Input.EventType.KEY_UP,this.onkeyUp,this);
     }
     
-
+    //AD控制的是z轴的分量,WS控制的是x轴的分量
     onkeyDown(event:EventKeyboard){   //在方法中声明event事件,类型是键盘事件
         //console.log('onkeyDown'+event.keyCode);  //键盘对于的码,输出的是哪个按键被触发了,触发的是什么按键的码
         switch(event.keyCode){
@@ -82,11 +92,13 @@ export class Player extends Component {
 
     //根据每一帧的速度更新小球的位置
     protected update(dt:number):void{
-        const pos =this.node.position;
-        this.node.setPosition(pos.x+this.moveDir.y*this.speed*dt,pos.y,pos.z+this.moveDir.x*this.speed*dt);
-
+        // const pos =this.node.position;
+        // this.node.setPosition(pos.x+this.moveDir.y*this.speed*dt,pos.y,pos.z+this.moveDir.x*this.speed*dt); //因为这个相机拜访角度的问题,在cocos
+        // //中这个相机的朝向是z轴向右,x轴向前(电脑内部方向),所以pos.x加上的是moveDir.y的分量(本质的是x轴上的分量)
+        //增加作用力的生成以及方向
+        this.rgd.applyForce(new Vec3(this.moveDir.y,0,this.moveDir.x).multiplyScalar(this.moveForce));
     }
-
+ 
 //     start() {
 
 //     }
