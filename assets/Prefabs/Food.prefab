@@ -39,9 +39,9 @@
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": -6.266,
-      "y": -3.642,
-      "z": -11.56
+      "x": -6.594,
+      "y": -3.601,
+      "z": -11.055
     },
     "_lrot": {
       "__type__": "cc.Quat",
@@ -194,7 +194,7 @@
       "__id__": 9
     },
     "_material": null,
-    "_isTrigger": false,
+    "_isTrigger": true,
     "_center": {
       "__type__": "cc.Vec3",
       "x": 0,
@@ -319,7 +319,7 @@
       "__id__": 17
     },
     "_material": null,
-    "_isTrigger": false,
+    "_isTrigger": true,
     "_center": {
       "__type__": "cc.Vec3",
       "x": 0,

@@ -1,4 +1,4 @@
-import { _decorator, Collider, Component, EventKeyboard, ICollisionEvent, Input, input, KeyCode, Node, RigidBody, Vec2, Vec3 } from 'cc';
+import { _decorator, Collider, Component, EventKeyboard, ICollisionEvent, Input, input, ITriggerEvent, KeyCode, Node, RigidBody, Vec2, Vec3 } from 'cc';
 import { Food } from './Food';
 const { ccclass, property } = _decorator;
 
@@ -23,10 +23,12 @@ export class Player extends Component {
          this.rgd = this.getComponent(RigidBody);
 
         this.collider =this.node.getComponent(Collider);
+        //将碰撞事件换成触发事件
+        this.collider.on('onTriggerEnter',this.onTriggerEnter,this)
 
-        this.collider.on('onCollisionEnter',this.onCollisionEnter,this);
-        this.collider.on('onCollisionExit',this.onCollisionExit,this);
-        this.collider.on('onCollisionStay',this.onCollisionStay,this);
+        // this.collider.on('onCollisionEnter',this.onCollisionEnter,this);
+        // this.collider.on('onCollisionExit',this.onCollisionExit,this);
+        // this.collider.on('onCollisionStay',this.onCollisionStay,this);
 
      }
 
@@ -43,23 +45,35 @@ export class Player extends Component {
         input.on(Input.EventType.KEY_PRESSING,this.onkeyPressing,this);
         input.on(Input.EventType.KEY_UP,this.onkeyUp,this);
     }
-    //监听碰撞事件
-    onCollisionEnter(event:ICollisionEvent){
+    // //监听碰撞事件
+    // onCollisionEnter(event:ICollisionEvent){
+    //     //设置一个food,上面获取的碰撞器是挂载着Food组件的,如果碰撞的时候没有Food节点就会返回空值
+    //     const food = event.otherCollider.getComponent(Food);
+    //     //检测小球是否和food发生碰撞,如果发生碰撞,则销毁food节点
+    //     if(food!=null){
+    //         food.node.destroy();
+    //     }
+    //     // console.log('onCollisionEnter');
+    // }
+
+    // onCollisionExit(){
+    //     // console.log('onCollisionExit');
+    // }
+
+    // onCollisionStay(){
+    //     // console.log('onCollisionStay');
+    // }
+    
+         //监听触发事件
+        onTriggerEnter(event:ITriggerEvent){
+            //设置一个food,上面获取的碰撞器是挂载着Food组件的,如果碰撞的时候没有Food节点就会返回空值
         const food = event.otherCollider.getComponent(Food);
         //检测小球是否和food发生碰撞,如果发生碰撞,则销毁food节点
         if(food!=null){
             food.node.destroy();
+         }
         }
-        // console.log('onCollisionEnter');
-    }
 
-    onCollisionExit(){
-        // console.log('onCollisionExit');
-    }
-
-    onCollisionStay(){
-        // console.log('onCollisionStay');
-    }
 
 
     protected onDestroy(): void {
@@ -67,9 +81,9 @@ export class Player extends Component {
         input.off(Input.EventType.KEY_PRESSING,this.onkeyPressing,this);
         input.off(Input.EventType.KEY_UP,this.onkeyUp,this);
 
-        this.collider.off('onCollisionEnter',this.onCollisionEnter,this);
-        this.collider.off('onCollisionExit',this.onCollisionExit,this);
-        this.collider.off('onCollisionStay',this.onCollisionStay,this);
+        // this.collider.off('onCollisionEnter',this.onCollisionEnter,this);
+        // this.collider.off('onCollisionExit',this.onCollisionExit,this);
+        // this.collider.off('onCollisionStay',this.onCollisionStay,this);
     }
     
     //AD控制的是z轴的分量,WS控制的是x轴的分量
